@@ -2,6 +2,7 @@ package br.usp.qracessivel
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -17,7 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import br.usp.qracessivel.ui.CameraPreview
+import br.usp.qracessivel.ui.MainScreen
 import br.usp.qracessivel.ui.PermissionRequest
 import br.usp.qracessivel.ui.theme.QRCodeReaderTheme
 
@@ -36,6 +37,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            // TODO: Processar imagem da galeria.
+            Log.d(TAG, "Imagem selecionada: $it")
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -44,9 +54,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    MainScreen(
+                    PreMainScreen(
                         hasCameraPermission = checkCameraPermission(),
-                        onRequestPermission = { requestCameraPermission() }
+                        onRequestPermission = { requestCameraPermission() },
+                        onGalleryClick = { galleryLauncher.launch("image/*") }
                     )
                 }
             }
@@ -66,14 +77,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(
+fun PreMainScreen(
     hasCameraPermission: Boolean,
-    onRequestPermission: () -> Unit
+    onRequestPermission: () -> Unit,
+    onGalleryClick: () -> Unit
 ) {
     var hasPermission by remember { mutableStateOf(hasCameraPermission) }
 
     if (hasPermission) {
-        CameraPreview()
+        MainScreen(
+            onGalleryClick = onGalleryClick
+        )
     } else {
         PermissionRequest(
             onRequestPermission = {

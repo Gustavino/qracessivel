@@ -6,7 +6,6 @@ import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -23,12 +22,28 @@ import java.util.concurrent.Executors
 private const val TAG = "CameraPreview"
 
 @Composable
-fun CameraPreview() {
+fun CameraPreview(
+    modifier: Modifier = Modifier,
+    analyzer: QrCodeAnalyzer
+) {
+
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
     val executor = remember { Executors.newSingleThreadExecutor() }
     var previewUseCase by remember { mutableStateOf<Preview?>(null) }
+
+    AndroidView(
+        modifier = modifier,
+        factory = { ctx ->
+            PreviewView(ctx).apply {
+                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
+            }
+        },
+        update = { previewView ->
+            previewUseCase?.setSurfaceProvider(previewView.surfaceProvider)
+        }
+    )
 
     LaunchedEffect(Unit) {
         try {
@@ -42,7 +57,7 @@ fun CameraPreview() {
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
                 .build()
                 .apply {
-                    setAnalyzer(executor, QrCodeAnalyzer())
+                    setAnalyzer(executor, analyzer)
                 }
 
             cameraProvider.unbindAll()
@@ -58,16 +73,4 @@ fun CameraPreview() {
             Log.e(TAG, "Error setting up camera preview", e)
         }
     }
-
-    AndroidView(
-        modifier = Modifier.fillMaxSize(),
-        factory = { ctx ->
-            PreviewView(ctx).apply {
-                implementationMode = PreviewView.ImplementationMode.COMPATIBLE
-            }
-        },
-        update = { previewView ->
-            previewUseCase?.setSurfaceProvider(previewView.surfaceProvider)
-        }
-    )
 }
