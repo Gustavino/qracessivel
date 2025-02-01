@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import br.usp.qracessivel.analyzer.QrCodeAnalyzer
 import br.usp.qracessivel.viewmodel.MainViewModel
+import br.usp.qracessivel.viewmodel.QrCodeState
 
 @Composable
 fun MainScreen(
@@ -64,32 +65,28 @@ fun MainScreen(
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // Status atual
+            val (statusText, contentDescription) = when (uiState) {
+                is QrCodeState.Scanning -> "Aponte para um QR Code" to "Aguardando QR Code"
+                is QrCodeState.Processing -> "Processando..." to "Processando QR Code"
+                is QrCodeState.Detected -> "QR Code detectado!" to "QR Code detectado"
+                is QrCodeState.Error -> "Erro ao ler QR Code" to "Erro na leitura"
+            }
             Text(
-                text = when {
-                    uiState.isProcessing -> "Processando..."
-                    uiState.detectedContent != null -> "QR Code detectado!"
-                    else -> "Aponte para um QR Code"
-                },
+                text = statusText,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.semantics {
-                    contentDescription = when {
-                        uiState.isProcessing -> "Processando..."
-                        uiState.detectedContent != null -> "QR Code detectado!"
-                        else -> "Aponte para um QR Code"
-                    }
+                    this.contentDescription = contentDescription
                 }
             )
 
-            // Conteúdo detectado
-            uiState.detectedContent?.let {
+            if (uiState is QrCodeState.Detected) {
                 Text(
-                    text = it,
+                    text = (uiState as QrCodeState.Detected).content,
                     style = MaterialTheme.typography.bodyLarge,
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .semantics {
-                            contentDescription = "Conteúdo do QR Code: $it"
+                            this.contentDescription = "Conteúdo do QR Code: ${(uiState as QrCodeState.Detected).content}"
                         }
                 )
             }

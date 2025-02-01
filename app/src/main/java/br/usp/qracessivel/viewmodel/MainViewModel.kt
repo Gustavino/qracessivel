@@ -1,31 +1,40 @@
 package br.usp.qracessivel.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import br.usp.qracessivel.analyzer.QrCodeAnalyzer
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-
-data class MainScreenState(
-    val detectedContent: String? = null,
-    val isProcessing: Boolean = false
-)
+import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(MainScreenState())
-    val uiState: StateFlow<MainScreenState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<QrCodeState>(QrCodeState.Scanning)
+    val uiState: StateFlow<QrCodeState> = _uiState.asStateFlow()
+
+    private var currentJob: Job? = null
 
     fun onQrCodeDetected(content: String) {
-        _uiState.value = _uiState.value.copy(
-            detectedContent = content,
-            isProcessing = false
-        )
+        currentJob?.cancel()
+
+        currentJob = viewModelScope.launch {
+            _uiState.value = QrCodeState.Detected(content)
+
+            delay(QrCodeAnalyzer.CONTENT_TIMEOUT)
+            _uiState.value = QrCodeState.Scanning
+        }
     }
 
     fun setProcessing(isProcessing: Boolean) {
-        _uiState.value = _uiState.value.copy(isProcessing = isProcessing)
+        if (isProcessing && _uiState.value is QrCodeState.Scanning) {
+            _uiState.value = QrCodeState.Processing
+        }
     }
 
-    fun clearDetectedContent() {
-        _uiState.value = _uiState.value.copy(detectedContent = null)
+    override fun onCleared() {
+        super.onCleared()
+        currentJob?.cancel()
     }
 }
