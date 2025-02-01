@@ -17,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.viewinterop.AndroidView
 import br.usp.qracessivel.analyzer.QrCodeAnalyzer
+import br.usp.qracessivel.viewmodel.MainViewModel
 import java.util.concurrent.Executors
 
 private const val TAG = "CameraPreview"
@@ -24,7 +25,8 @@ private const val TAG = "CameraPreview"
 @Composable
 fun CameraPreview(
     modifier: Modifier = Modifier,
-    analyzer: QrCodeAnalyzer
+    analyzer: QrCodeAnalyzer,
+    viewModel: MainViewModel
 ) {
 
     val context = LocalContext.current
@@ -55,18 +57,20 @@ fun CameraPreview(
 
             val imageAnalysis = ImageAnalysis.Builder()
                 .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+                .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_YUV_420_888)
                 .build()
                 .apply {
                     setAnalyzer(executor, analyzer)
                 }
 
             cameraProvider.unbindAll()
-            cameraProvider.bindToLifecycle(
+            val camera = cameraProvider.bindToLifecycle(
                 lifecycleOwner,
                 cameraSelector,
                 preview,
                 imageAnalysis
             )
+            viewModel.setCamera(camera)
 
             previewUseCase = preview
         } catch (e: Exception) {

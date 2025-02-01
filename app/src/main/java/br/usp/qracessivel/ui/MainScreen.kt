@@ -1,14 +1,18 @@
 package br.usp.qracessivel.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FlashOff
+import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -17,14 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import br.usp.qracessivel.analyzer.QrCodeAnalyzer
 import br.usp.qracessivel.viewmodel.MainViewModel
 import br.usp.qracessivel.viewmodel.QrCodeState
 
@@ -35,13 +37,7 @@ fun MainScreen(
     onGalleryClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
-
-    val qrCodeAnalyzer = remember {
-        QrCodeAnalyzer(
-            onQrCodeDetected = viewModel::onQrCodeDetected,
-            onProcessingChanged = viewModel::setProcessing
-        )
-    }
+    val isTorchOn by viewModel.torchState.collectAsState()
 
     Box(modifier = modifier.fillMaxSize()) {
         // Preview da câmera (3/4 superiores da tela)
@@ -52,7 +48,8 @@ fun MainScreen(
                 .semantics {
                     contentDescription = "Preview da câmera. Aponte para um QR code."
                 },
-            analyzer = qrCodeAnalyzer
+            analyzer = viewModel.qrCodeAnalyzer,
+            viewModel = viewModel
         )
 
         // Área de feedback (1/4 inferior)
@@ -86,27 +83,57 @@ fun MainScreen(
                     modifier = Modifier
                         .padding(top = 8.dp)
                         .semantics {
-                            this.contentDescription = "Conteúdo do QR Code: ${(uiState as QrCodeState.Detected).content}"
+                            this.contentDescription =
+                                "Conteúdo do QR Code: ${(uiState as QrCodeState.Detected).content}"
                         }
                 )
             }
         }
 
-        // Botão de galeria (canto inferior direito)
-        FloatingActionButton(
-            onClick = onGalleryClick,
+        // Botões flutuantes (canto inferior direito)
+        Row(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
                 .padding(16.dp)
-                .size(64.dp)
-                .semantics {
-                    contentDescription = "Selecionar imagem da galeria"
-                }
+                .semantics(mergeDescendants = true) {
+                    contentDescription = "Controles da câmera"
+                },
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Icon(
-                imageVector = Icons.Default.Photo,
-                contentDescription = null
-            )
+            // Botão da lanterna
+            FloatingActionButton(
+                onClick = viewModel::toggleTorch,
+                modifier = Modifier
+                    .size(64.dp)
+                    .semantics {
+                        contentDescription = if (isTorchOn) {
+                            "Desligar lanterna"
+                        } else {
+                            "Ligar lanterna"
+                        }
+                    }
+            ) {
+                Icon(
+                    imageVector = if (isTorchOn) Icons.Default.FlashOff else Icons.Default.FlashOn,
+                    contentDescription = null
+                )
+            }
+
+            // Botão da galeria
+            FloatingActionButton(
+                onClick = onGalleryClick,
+                modifier = Modifier
+                    .size(64.dp)
+                    .semantics {
+                        contentDescription = "Selecionar imagem da galeria"
+                    }
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Photo,
+                    contentDescription = null
+                )
+            }
         }
     }
 }
