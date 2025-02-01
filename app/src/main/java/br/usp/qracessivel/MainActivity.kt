@@ -8,6 +8,7 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,11 +22,11 @@ import androidx.core.content.ContextCompat
 import br.usp.qracessivel.ui.MainScreen
 import br.usp.qracessivel.ui.PermissionRequest
 import br.usp.qracessivel.ui.theme.QRCodeReaderTheme
+import br.usp.qracessivel.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
-    companion object {
-        private const val TAG = "MainActivity"
-    }
+
+    private val viewModel: MainViewModel by viewModels()
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -41,8 +42,7 @@ class MainActivity : ComponentActivity() {
         ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         uri?.let {
-            // TODO: Processar imagem da galeria.
-            Log.d(TAG, "Imagem selecionada: $it")
+            viewModel.processGalleryImage(it)
         }
     }
 
@@ -73,6 +73,10 @@ class MainActivity : ComponentActivity() {
 
     private fun requestCameraPermission() {
         requestPermissionLauncher.launch(Manifest.permission.CAMERA)
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }
 
