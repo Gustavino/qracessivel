@@ -12,25 +12,25 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.content.ContextCompat
-import br.usp.qracessivel.ui.MainScreen
-import br.usp.qracessivel.ui.PermissionRequest
+import androidx.navigation.compose.rememberNavController
+import br.usp.qracessivel.navigation.AppNavigation
 import br.usp.qracessivel.ui.theme.QRCodeReaderTheme
 import br.usp.qracessivel.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainViewModel by viewModels()
+    private var hasCameraPermission by mutableStateOf(false)
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
+        hasCameraPermission = isGranted
         if (isGranted) {
             Log.d(TAG, "Camera permission granted")
         } else {
@@ -54,10 +54,14 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    PreMainScreen(
-                        hasCameraPermission = checkCameraPermission(),
+                    val navController = rememberNavController()
+                    hasCameraPermission = checkCameraPermission()
+                    AppNavigation(
+                        navController = navController,
+                        onGalleryClick = { galleryLauncher.launch("image/*") },
+                        hasCameraPermission = hasCameraPermission,
                         onRequestPermission = { requestCameraPermission() },
-                        onGalleryClick = { galleryLauncher.launch("image/*") }
+                        viewModel = viewModel
                     )
                 }
             }
@@ -77,27 +81,5 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         private const val TAG = "MainActivity"
-    }
-}
-
-@Composable
-fun PreMainScreen(
-    hasCameraPermission: Boolean,
-    onRequestPermission: () -> Unit,
-    onGalleryClick: () -> Unit
-) {
-    var hasPermission by remember { mutableStateOf(hasCameraPermission) }
-
-    if (hasPermission) {
-        MainScreen(
-            onGalleryClick = onGalleryClick
-        )
-    } else {
-        PermissionRequest(
-            onRequestPermission = {
-                onRequestPermission()
-                hasPermission = true
-            }
-        )
     }
 }
