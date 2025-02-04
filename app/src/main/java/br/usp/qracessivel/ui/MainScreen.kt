@@ -1,5 +1,6 @@
 package br.usp.qracessivel.ui
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +20,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,18 +28,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import br.usp.qracessivel.model.ResultContent
+import br.usp.qracessivel.viewmodel.MainEvent
 import br.usp.qracessivel.viewmodel.MainViewModel
 import br.usp.qracessivel.viewmodel.QrCodeState
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = viewModel(),
-    onGalleryClick: () -> Unit
+    viewModel: MainViewModel,
+    onGalleryClick: () -> Unit,
+    onQrDetected: (ResultContent) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isTorchOn by viewModel.torchState.collectAsState()
+
+    LaunchedEffect(true) {
+        viewModel.events.collectLatest { event ->
+            when (event) {
+                is MainEvent.QrCodeDetected -> onQrDetected(event.content)
+            }
+        }
+    }
 
     Box(modifier = modifier.fillMaxSize()) {
         // Preview da câmera (3/4 superiores da tela)
@@ -52,6 +65,7 @@ fun MainScreen(
             viewModel = viewModel
         )
 
+        // TODO: alterar essa tela agora que temos resultados em telas individuais. talvez mantê-la para um possível modo contínuo?
         // Área de feedback (1/4 inferior)
         Column(
             modifier = Modifier

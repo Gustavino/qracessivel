@@ -5,15 +5,17 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import br.usp.qracessivel.analyzer.QrCodeAnalyzer
+import br.usp.qracessivel.model.ResultParser
 import br.usp.qracessivel.service.AudioFeedbackService
 import br.usp.qracessivel.service.GalleryQrService
 import br.usp.qracessivel.service.TorchService
 import br.usp.qracessivel.service.VibrationService
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
@@ -27,6 +29,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val uiState: StateFlow<QrCodeState> = _uiState.asStateFlow()
 
     val torchState = torchService.torchState
+
+    private val _events = Channel<MainEvent>()
+    val events = _events.receiveAsFlow()
+
     val qrCodeAnalyzer = QrCodeAnalyzer(
         onQrCodeDetected = ::onQrCodeDetected,
         onProcessingChanged = ::setProcessing
@@ -40,16 +46,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         audioFeedbackService.release()
     }
 
-    fun onQrCodeDetected(content: String) {
-        currentJob?.cancel()
-
-        currentJob = viewModelScope.launch {
-            _uiState.value = QrCodeState.Detected(content)
-
-            giveDetectionFeedbackToUser()
-
-            delay(QrCodeAnalyzer.CONTENT_TIMEOUT)
-            _uiState.value = QrCodeState.Scanning
+    fun onQrCodeDetected(rawContent: String) {
+        viewModelScope.launch {
+            processQrContent(rawContent)
         }
     }
 
@@ -73,11 +72,19 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 _uiState.value = QrCodeState.Processing
                 val content = galleryQrService.processImage(uri)
-                onQrCodeDetected(content)
+                processQrContent(content)
             } catch (e: Exception) {
                 _uiState.value = QrCodeState.Error(e.message ?: "Erro ao processar imagem")
             }
         }
+    }
+
+    private suspend fun processQrContent(rawContent: String) {
+        _uiState.value = QrCodeState.Detected(rawContent)
+        giveDetectionFeedbackToUser()
+        val parsedContent = ResultParser.parse(rawContent)
+        _events.send(MainEvent.QrCodeDetected(parsedContent))
+        _uiState.value = QrCodeState.Scanning
     }
 
     private fun giveDetectionFeedbackToUser() {
