@@ -5,11 +5,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
@@ -41,7 +42,8 @@ fun ResultActionBar(
             }
         ) {
             Icon(
-                imageVector = Icons.Default.ArrowBack,
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 contentDescription = null
             )
         }
@@ -56,6 +58,7 @@ fun ResultActionBar(
         ) {
             Icon(
                 imageVector = Icons.Default.ContentCopy,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 contentDescription = null
             )
         }
@@ -68,6 +71,7 @@ fun ResultActionBar(
         ) {
             Icon(
                 imageVector = Icons.Default.Share,
+                tint = MaterialTheme.colorScheme.onPrimary,
                 contentDescription = null
             )
         }

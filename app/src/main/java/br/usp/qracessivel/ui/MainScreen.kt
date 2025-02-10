@@ -1,7 +1,5 @@
 package br.usp.qracessivel.ui
 
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -72,7 +70,6 @@ fun MainScreen(
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
                 .fillMaxHeight(0.25f)
-                .background(MaterialTheme.colorScheme.surface)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -87,7 +84,8 @@ fun MainScreen(
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.semantics {
                     this.contentDescription = contentDescription
-                }
+                },
+                color = MaterialTheme.colorScheme.onPrimary
             )
 
             if (uiState is QrCodeState.Detected) {
@@ -130,7 +128,8 @@ fun MainScreen(
             ) {
                 Icon(
                     imageVector = if (isTorchOn) Icons.Default.FlashOff else Icons.Default.FlashOn,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -145,7 +144,8 @@ fun MainScreen(
             ) {
                 Icon(
                     imageVector = Icons.Default.Photo,
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }

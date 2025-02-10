@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,7 +28,7 @@ fun ActionButton(
             .fillMaxWidth()
             .semantics { this.contentDescription = contentDescription }
     ) {
-        Icon(icon, contentDescription = null)
+        Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimary)
         Spacer(modifier = Modifier.width(8.dp))
         Text(text)
     }
