@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.ActionButton
+import br.usp.qracessivel.ui.components.ActionButton
 
 @Composable
 fun UnknownContent(content: ResultContent.Unknown) {

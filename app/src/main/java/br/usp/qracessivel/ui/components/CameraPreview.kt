@@ -1,4 +1,4 @@
-package br.usp.qracessivel.ui
+package br.usp.qracessivel.ui.components
 
 import android.util.Log
 import androidx.camera.core.CameraSelector

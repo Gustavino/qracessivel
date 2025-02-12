@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.ActionButton
+import br.usp.qracessivel.ui.components.ActionButton
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

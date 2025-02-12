@@ -1,4 +1,4 @@
-package br.usp.qracessivel.ui
+package br.usp.qracessivel.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

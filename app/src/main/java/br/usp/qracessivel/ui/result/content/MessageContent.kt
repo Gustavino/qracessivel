@@ -13,7 +13,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.ActionButton
+import br.usp.qracessivel.ui.components.ActionButton
 
 @Composable
 fun MessageContent(content: ResultContent.Message) {

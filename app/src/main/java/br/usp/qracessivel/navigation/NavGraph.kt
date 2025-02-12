@@ -6,8 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.MainScreen
-import br.usp.qracessivel.ui.PermissionRequest
+import br.usp.qracessivel.ui.components.MainScreen
+import br.usp.qracessivel.ui.components.PermissionRequest
 import br.usp.qracessivel.ui.result.ResultScreen
 import br.usp.qracessivel.viewmodel.MainViewModel
 
