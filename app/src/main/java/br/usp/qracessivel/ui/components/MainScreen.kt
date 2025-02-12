@@ -29,6 +29,7 @@ import br.usp.qracessivel.viewmodel.MainViewModel
 import br.usp.qracessivel.viewmodel.QrCodeState
 import kotlinx.coroutines.flow.collectLatest
 
+// TODO: testar UI em horizontal.
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
