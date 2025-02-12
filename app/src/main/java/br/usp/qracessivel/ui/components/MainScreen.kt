@@ -102,52 +102,26 @@ fun MainScreen(
             }
         }
 
-        // Botões flutuantes (canto inferior direito)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
-                .padding(16.dp)
-                .semantics(mergeDescendants = true) {
-                    contentDescription = "Controles da câmera"
-                },
-            horizontalArrangement = Arrangement.SpaceBetween
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            // Botão da lanterna
-            FloatingActionButton(
+            AccessibleFloatingButton(
+                text = "LANTERNA",
+                icon = if (isTorchOn) Icons.Default.FlashOff else Icons.Default.FlashOn,
                 onClick = viewModel::toggleTorch,
-                modifier = Modifier
-                    .size(64.dp)
-                    .semantics {
-                        contentDescription = if (isTorchOn) {
-                            "Desligar lanterna"
-                        } else {
-                            "Ligar lanterna"
-                        }
-                    }
-            ) {
-                Icon(
-                    imageVector = if (isTorchOn) Icons.Default.FlashOff else Icons.Default.FlashOn,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+                contentDescription = if (isTorchOn) "Desligar lanterna" else "Ligar lanterna"
+            )
 
-            // Botão da galeria
-            FloatingActionButton(
+            AccessibleFloatingButton(
+                text = "GALERIA",
+                icon = Icons.Default.Photo,
                 onClick = onGalleryClick,
-                modifier = Modifier
-                    .size(64.dp)
-                    .semantics {
-                        contentDescription = "Selecionar imagem da galeria"
-                    }
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Photo,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
-                )
-            }
+                contentDescription = "Abrir galeria de imagens"
+            )
         }
     }
 }
