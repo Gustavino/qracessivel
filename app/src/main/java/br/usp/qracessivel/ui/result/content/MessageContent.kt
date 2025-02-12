@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +35,8 @@ fun MessageContent(content: ResultContent.Message) {
 
             val isWhatsApp = content.number.startsWith("wa.me/")
             if (isWhatsApp) {
+                // todo: refinar caso de whatsapp.
                 ActionButton(
-//                    icon = Icons.Default.WhatsApp,
                     icon = Icons.AutoMirrored.Filled.Send,
                     text = "Abrir no WhatsApp",
                     contentDescription = "Abrir conversa no WhatsApp",
@@ -45,7 +44,7 @@ fun MessageContent(content: ResultContent.Message) {
                 )
             } else {
                 ActionButton(
-                    icon = Icons.Default.Send,
+                    icon = Icons.AutoMirrored.Filled.Send,
                     text = "Enviar SMS",
                     contentDescription = "Enviar SMS para ${content.number}",
                     onClick = { /* Implementar envio de SMS */ }

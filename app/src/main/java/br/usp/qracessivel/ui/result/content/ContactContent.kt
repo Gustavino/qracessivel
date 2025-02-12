@@ -17,12 +17,10 @@ import br.usp.qracessivel.ui.components.ActionButton
 fun ContactContent(content: ResultContent.Contact) {
     ContentCard(title = "Contato") {
         Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            content.name?.let {
-                Text(
-                    text = it,
-                    style = MaterialTheme.typography.headlineSmall
-                )
-            }
+            Text(
+                text = content.name,
+                style = MaterialTheme.typography.headlineSmall
+            )
 
             content.phone?.let {
                 ActionButton(
