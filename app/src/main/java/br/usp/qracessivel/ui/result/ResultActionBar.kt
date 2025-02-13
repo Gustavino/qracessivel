@@ -8,22 +8,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.usp.qracessivel.model.ResultContent
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun ResultActionBar(
-    content: ResultContent,
+    rawContent: String,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -33,47 +30,42 @@ fun ResultActionBar(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        FloatingActionButton(
+        AccessibleFloatingButton(
+            text = "VOLTAR",
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
             onClick = onDismiss,
-            modifier = Modifier.semantics {
-                contentDescription = "Voltar para o scanner"
-            }
-        ) {
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                contentDescription = null
-            )
-        }
+            contentDescription = "Voltar para o scanner",
+            modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+        )
 
-        FloatingActionButton(
+        AccessibleFloatingButton(
+            text = "COPIAR",
+            icon = Icons.Default.ContentCopy,
             onClick = {
-                clipboardManager.setText(AnnotatedString(content.rawContent))
+                clipboardManager.setText(AnnotatedString(rawContent))
             },
-            modifier = Modifier.semantics {
-                contentDescription = "Copiar conteúdo"
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ContentCopy,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                contentDescription = null
-            )
-        }
+            contentDescription = "Copiar conteúdo",
+            modifier = Modifier.weight(1f)
+        )
 
-        FloatingActionButton(
+        AccessibleFloatingButton(
+            text = "COMPARTILHAR",
+            icon = Icons.Default.Share,
             onClick = { /* Implementar compartilhamento */ },
-            modifier = Modifier.semantics {
-                contentDescription = "Compartilhar conteúdo"
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.Share,
-                tint = MaterialTheme.colorScheme.onPrimary,
-                contentDescription = null
-            )
-        }
+            contentDescription = "Compartilhar conteúdo",
+                    modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+        )
     }
+}
+
+@Composable
+@Preview(fontScale = 2f)
+fun ResultActionBarPreview() {
+    ResultActionBar(
+        rawContent = "Texto de exemplo",
+        onDismiss = { /* Implementar ação de voltar */ }
+    )
 }

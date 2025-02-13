@@ -2,7 +2,6 @@ package br.usp.qracessivel.analyzer
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageProxy
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions
 import com.google.mlkit.vision.barcode.BarcodeScanning
@@ -12,7 +11,7 @@ import com.google.mlkit.vision.common.InputImage
 class QrCodeAnalyzer(
     private val onQrCodeDetected: (String) -> Unit,
     private val onProcessingChanged: (Boolean) -> Unit
-) : ImageAnalysis.Analyzer {
+) : QrCodeAnalyzerContract {
 
     private val options = BarcodeScannerOptions.Builder()
         .setBarcodeFormats(Barcode.FORMAT_QR_CODE)

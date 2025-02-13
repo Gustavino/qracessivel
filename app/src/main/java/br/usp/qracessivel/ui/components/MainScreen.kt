@@ -22,10 +22,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.usp.qracessivel.viewmodel.MainContract
 import br.usp.qracessivel.model.ResultContent
+import br.usp.qracessivel.ui.preview.FakeMainViewModel
+import br.usp.qracessivel.ui.preview.previewViewModel
+import br.usp.qracessivel.ui.theme.QRCodeReaderTheme
 import br.usp.qracessivel.viewmodel.MainEvent
-import br.usp.qracessivel.viewmodel.MainViewModel
 import br.usp.qracessivel.viewmodel.QrCodeState
 import kotlinx.coroutines.flow.collectLatest
 
@@ -33,7 +37,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun MainScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel,
+    viewModel: MainContract,
     onGalleryClick: () -> Unit,
     onQrDetected: (ResultContent) -> Unit
 ) {
@@ -50,7 +54,7 @@ fun MainScreen(
 
     Box(modifier = modifier.fillMaxSize()) {
         // Preview da câmera (3/4 superiores da tela)
-        CameraPreview(
+        CameraView(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.75f)
@@ -58,7 +62,7 @@ fun MainScreen(
                     contentDescription = "Preview da câmera. Aponte para um QR code."
                 },
             analyzer = viewModel.qrCodeAnalyzer,
-            viewModel = viewModel
+            setCamera = viewModel::setCamera
         )
 
         // TODO: alterar essa tela agora que temos resultados em telas individuais. talvez mantê-la para um possível modo contínuo?
@@ -123,3 +127,60 @@ fun MainScreen(
         }
     }
 }
+
+@Preview(
+    name = "Main Screen - Portrait",
+    device = "spec:width=411dp,height=891dp",
+    showBackground = true,
+    backgroundColor = 0xFF1C1B1F
+)
+@Preview(
+    name = "Main Screen - Portrait - Extra large font",
+    device = "spec:width=411dp,height=891dp",
+    showBackground = true,
+    backgroundColor = 0xFF1C1B1F,
+    fontScale = 2f
+)
+@Composable
+fun MainScreenPreviewPortrait(
+) {
+    QRCodeReaderTheme {
+        MainScreen(
+            viewModel = FakeMainViewModel(),
+            onGalleryClick = {},
+            onQrDetected = {},
+        )
+    }
+}
+
+@Preview(
+    name = "Main Screen - Landscape",
+    showBackground = true,
+    backgroundColor = 0xFF1C1B1F,
+    device = "spec:width=891dp,height=411dp"
+)
+@Preview(
+    name = "Main Screen - Landscape - Large font",
+    showBackground = true,
+    backgroundColor = 0xFF1C1B1F,
+    device = "spec:width=891dp,height=411dp",
+    fontScale = 1.5f
+)
+@Preview(
+    name = "Main Screen - Landscape - Extra large font",
+    showBackground = true,
+    backgroundColor = 0xFF1C1B1F,
+    device = "spec:width=891dp,height=411dp",
+    fontScale = 2f
+)
+@Composable
+fun MainScreenPreview() {
+    QRCodeReaderTheme {
+        MainScreen(
+            viewModel = previewViewModel(),
+            onGalleryClick = {},
+            onQrDetected = {}
+        )
+    }
+}
+

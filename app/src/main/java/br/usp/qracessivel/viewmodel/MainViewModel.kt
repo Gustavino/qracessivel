@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(application: Application) : AndroidViewModel(application), MainContract {
 
     private val torchService = TorchService()
     private val vibrationService = VibrationService(application)
@@ -26,14 +26,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val galleryQrService = GalleryQrService(application)
 
     private val _uiState = MutableStateFlow<QrCodeState>(QrCodeState.Scanning)
-    val uiState: StateFlow<QrCodeState> = _uiState.asStateFlow()
+    override val uiState: StateFlow<QrCodeState> = _uiState.asStateFlow()
 
-    val torchState = torchService.torchState
+    override val torchState = torchService.torchState
 
     private val _events = Channel<MainEvent>()
-    val events = _events.receiveAsFlow()
+    override val events = _events.receiveAsFlow()
 
-    val qrCodeAnalyzer = QrCodeAnalyzer(
+    override val qrCodeAnalyzer = QrCodeAnalyzer(
         onQrCodeDetected = ::onQrCodeDetected,
         onProcessingChanged = ::setProcessing
     )
@@ -46,28 +46,28 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         audioFeedbackService.release()
     }
 
-    fun onQrCodeDetected(rawContent: String) {
+    override fun onQrCodeDetected(rawContent: String) {
         viewModelScope.launch {
             processQrContent(rawContent)
         }
     }
 
-    fun setProcessing(isProcessing: Boolean) {
+    override fun setProcessing(isProcessing: Boolean) {
         if (isProcessing && _uiState.value is QrCodeState.Scanning) {
             _uiState.value = QrCodeState.Processing
             audioFeedbackService.playProcessingStartSound()
         }
     }
 
-    fun toggleTorch() {
+    override fun toggleTorch() {
         torchService.toggleTorch()
     }
 
-    fun setCamera(camera: androidx.camera.core.Camera) {
+    override fun setCamera(camera: androidx.camera.core.Camera) {
         torchService.setCamera(camera)
     }
 
-    fun processGalleryImage(uri: Uri) {
+    override fun processGalleryImage(uri: Uri) {
         viewModelScope.launch {
             try {
                 _uiState.value = QrCodeState.Processing

@@ -1,5 +1,6 @@
 package br.usp.qracessivel.navigation
 
+import ResultScreen
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
@@ -8,7 +9,6 @@ import androidx.navigation.compose.composable
 import br.usp.qracessivel.model.ResultContent
 import br.usp.qracessivel.ui.components.MainScreen
 import br.usp.qracessivel.ui.components.PermissionRequest
-import br.usp.qracessivel.ui.result.ResultScreen
 import br.usp.qracessivel.viewmodel.MainViewModel
 
 sealed class Screen(val route: String) {

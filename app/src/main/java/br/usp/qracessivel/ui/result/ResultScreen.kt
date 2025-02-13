@@ -1,10 +1,9 @@
-package br.usp.qracessivel.ui.result
-
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,8 +11,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
+import br.usp.qracessivel.ui.result.ResultActionBar
 import br.usp.qracessivel.ui.result.content.BinaryContent
 import br.usp.qracessivel.ui.result.content.CalendarContent
 import br.usp.qracessivel.ui.result.content.ContactContent
@@ -25,6 +26,7 @@ import br.usp.qracessivel.ui.result.content.TextContent
 import br.usp.qracessivel.ui.result.content.URLContent
 import br.usp.qracessivel.ui.result.content.UnknownContent
 import br.usp.qracessivel.ui.result.content.WiFiContent
+import br.usp.qracessivel.ui.result.getTypeLabel
 
 @Composable
 fun ResultScreen(
@@ -32,41 +34,67 @@ fun ResultScreen(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
+    LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Text(
-            text = content.getTypeLabel(),
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.semantics {
-                contentDescription = "Tipo de conteúdo: ${content.getTypeLabel()}"
-            }
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        when (content) {
-            is ResultContent.Text -> TextContent(content)
-            is ResultContent.Url -> URLContent(content)
-            is ResultContent.Contact -> ContactContent(content)
-            is ResultContent.GeoLocation -> GeoLocationContent(content)
-            is ResultContent.Email -> EmailContent(content)
-            is ResultContent.Phone -> PhoneContent(content)
-            is ResultContent.Message -> MessageContent(content)
-            is ResultContent.WiFi -> WiFiContent(content)
-            is ResultContent.CalendarEvent -> CalendarContent(content)
-            is ResultContent.Binary -> BinaryContent(content)
-            is ResultContent.Unknown -> UnknownContent(content)
+        item {
+            Text(
+                text = content.getTypeLabel(),
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.semantics {
+                    contentDescription = "Tipo de conteúdo: ${content.getTypeLabel()}"
+                }
+            )
         }
 
-        Spacer(modifier = Modifier.weight(1f))
+        item {
+            when (content) {
+                is ResultContent.Text -> TextContent(content)
+                is ResultContent.Url -> URLContent(content)
+                is ResultContent.Contact -> ContactContent(content)
+                is ResultContent.GeoLocation -> GeoLocationContent(content)
+                is ResultContent.Email -> EmailContent(content)
+                is ResultContent.Phone -> PhoneContent(content)
+                is ResultContent.Message -> MessageContent(content)
+                is ResultContent.WiFi -> WiFiContent(content)
+                is ResultContent.CalendarEvent -> CalendarContent(content)
+                is ResultContent.Binary -> BinaryContent(content)
+                is ResultContent.Unknown -> UnknownContent(content)
+            }
+        }
 
-        ResultActionBar(
-            content = content,
-            onDismiss = onDismiss
-        )
+        item {
+            Spacer(modifier = Modifier.height(24.dp))
+        }
+
+        item {
+            ResultActionBar(
+                rawContent = content.rawContent,
+                onDismiss = onDismiss
+            )
+        }
     }
+}
+
+@Composable
+@Preview(fontScale = 1.5f)
+fun ResultScreenPreview() {
+    ResultScreen(
+        content = ResultContent.Contact(
+            rawContent = "Contato",
+            name = "Roberto",
+            phone = "+5511987654321",
+            email = "roberto@contato.com",
+            address = "Rua do Contato, 123",
+            organization = "QR Acessivel LTDA",
+            title = "Desenvolvedor",
+            url = "https://qracessivel.com",
+            note = "Nota de contato"
+        ),
+        onDismiss = {}
+    )
 }
