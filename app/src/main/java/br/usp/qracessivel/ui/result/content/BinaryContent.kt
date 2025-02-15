@@ -1,4 +1,3 @@
-// BinaryContent.kt
 package br.usp.qracessivel.ui.result.content
 
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun BinaryContent(content: ResultContent.Binary) {
@@ -28,7 +27,7 @@ fun BinaryContent(content: ResultContent.Binary) {
                 style = MaterialTheme.typography.bodyLarge
             )
 
-            ActionButton(
+            AccessibleFloatingButton(
                 icon = Icons.Default.Download,
                 text = "Salvar dados",
                 contentDescription = "Salvar dados binários",

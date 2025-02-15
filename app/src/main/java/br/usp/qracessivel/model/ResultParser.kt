@@ -1,11 +1,15 @@
 package br.usp.qracessivel.model
 
 import android.util.Patterns
+import br.usp.qracessivel.pix.PixQrParser
 import java.net.URL
 
 // TODO: test each single event.
 object ResultParser {
+    private val pixParser = PixQrParser()
     fun parse(rawContent: String): ResultContent {
+        pixParser.parse(rawContent)?.let { return it }
+
         return when {
             rawContent.startsWith(ResultContent.VCARD_PREFIX) -> parseVCard(rawContent)
 

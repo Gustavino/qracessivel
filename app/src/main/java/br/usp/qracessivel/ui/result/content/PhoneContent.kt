@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun PhoneContent(content: ResultContent.Phone) {
@@ -21,14 +21,14 @@ fun PhoneContent(content: ResultContent.Phone) {
                 style = MaterialTheme.typography.headlineSmall
             )
 
-            ActionButton(
+            AccessibleFloatingButton(
                 icon = Icons.Default.Phone,
                 text = "Ligar",
                 contentDescription = "Ligar para ${content.number}",
                 onClick = { /* Implementar ação de ligação */ }
             )
 
-            ActionButton(
+            AccessibleFloatingButton(
                 icon = Icons.AutoMirrored.Filled.Message,
                 text = "Enviar SMS",
                 contentDescription = "Enviar SMS para ${content.number}",

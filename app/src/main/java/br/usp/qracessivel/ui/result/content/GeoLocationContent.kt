@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun GeoLocationContent(content: ResultContent.GeoLocation) {
@@ -30,12 +30,12 @@ fun GeoLocationContent(content: ResultContent.GeoLocation) {
                 text = "Longitude: ${content.longitude}", style = MaterialTheme.typography.bodyLarge
             )
 
-            ActionButton(icon = Icons.Default.Map,
+            AccessibleFloatingButton(icon = Icons.Default.Map,
                 text = "Abrir no mapa",
                 contentDescription = "Abrir localização no mapa",
                 onClick = { /* Implementar abertura no mapa */ })
 
-            ActionButton(icon = Icons.AutoMirrored.Filled.NavigateNext,
+            AccessibleFloatingButton(icon = Icons.AutoMirrored.Filled.NavigateNext,
                 text = "Iniciar navegação",
                 contentDescription = "Iniciar navegação até o local",
                 onClick = { /* Implementar navegação */ })

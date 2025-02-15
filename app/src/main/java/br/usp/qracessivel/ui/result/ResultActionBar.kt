@@ -1,7 +1,7 @@
 package br.usp.qracessivel.ui.result
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -9,7 +9,6 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
@@ -26,19 +25,18 @@ fun ResultActionBar(
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
 
-    Row(
+    Column(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         AccessibleFloatingButton(
             text = "VOLTAR",
             icon = Icons.AutoMirrored.Filled.ArrowBack,
             onClick = onDismiss,
             contentDescription = "Voltar para o scanner",
-            modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+            modifier = Modifier.fillMaxWidth()
         )
 
         AccessibleFloatingButton(
@@ -48,7 +46,7 @@ fun ResultActionBar(
                 clipboardManager.setText(AnnotatedString(rawContent))
             },
             contentDescription = "Copiar conteúdo",
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.fillMaxWidth()
         )
 
         AccessibleFloatingButton(
@@ -56,7 +54,7 @@ fun ResultActionBar(
             icon = Icons.Default.Share,
             onClick = { /* Implementar compartilhamento */ },
             contentDescription = "Compartilhar conteúdo",
-                    modifier = Modifier.weight(1f).align(Alignment.CenterVertically)
+            modifier = Modifier.fillMaxWidth()
         )
     }
 }

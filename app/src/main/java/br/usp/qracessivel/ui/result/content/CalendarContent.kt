@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -52,7 +52,7 @@ fun CalendarContent(content: ResultContent.CalendarEvent) {
                 )
             }
 
-            ActionButton(
+            AccessibleFloatingButton(
                 icon = Icons.Default.CalendarToday,
                 text = "Adicionar ao calendário",
                 contentDescription = "Adicionar evento ao calendário",
@@ -60,7 +60,7 @@ fun CalendarContent(content: ResultContent.CalendarEvent) {
             )
 
             content.location?.let {
-                ActionButton(
+                AccessibleFloatingButton(
                     icon = Icons.Default.Place,
                     text = "Ver local",
                     contentDescription = "Ver localização do evento",

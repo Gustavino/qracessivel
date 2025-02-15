@@ -5,20 +5,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun URLContent(content: ResultContent.Url) {
@@ -44,18 +41,24 @@ fun URLContent(content: ResultContent.Url) {
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { /* Implementar abertura do link */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .semantics {
-                        contentDescription = "Abrir link: ${content.url}"
-                    }
-            ) {
-                Icon(Icons.AutoMirrored.Filled.OpenInNew, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Abrir link")
-            }
+            AccessibleFloatingButton(
+                icon = Icons.AutoMirrored.Filled.OpenInNew,
+                text = "Abrir link",
+                contentDescription = "Abrir link: ${content.url}",
+                onClick = { /* Implementar abertura do link */ }
+            )
         }
     }
+}
+
+@Preview
+@Composable
+fun URLContentPreview() {
+    URLContent(
+        content = ResultContent.Url(
+            "https://usp.br",
+            url = "https://usp.br",
+            timestamp = 129387812837L
+        )
+    )
 }

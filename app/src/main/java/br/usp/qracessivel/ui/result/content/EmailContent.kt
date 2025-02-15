@@ -9,7 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun EmailContent(content: ResultContent.Email) {
@@ -34,7 +34,7 @@ fun EmailContent(content: ResultContent.Email) {
                 )
             }
 
-            ActionButton(
+            AccessibleFloatingButton(
                 icon = Icons.AutoMirrored.Filled.Send,
                 text = "Enviar email",
                 contentDescription = "Enviar email para ${content.address}",

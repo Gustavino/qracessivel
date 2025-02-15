@@ -11,8 +11,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import br.usp.qracessivel.model.PixQrContent
 import br.usp.qracessivel.model.ResultContent
 import br.usp.qracessivel.ui.result.ResultActionBar
 import br.usp.qracessivel.ui.result.content.BinaryContent
@@ -22,6 +22,7 @@ import br.usp.qracessivel.ui.result.content.EmailContent
 import br.usp.qracessivel.ui.result.content.GeoLocationContent
 import br.usp.qracessivel.ui.result.content.PhoneContent
 import br.usp.qracessivel.ui.result.content.MessageContent
+import br.usp.qracessivel.ui.result.content.PixContent
 import br.usp.qracessivel.ui.result.content.TextContent
 import br.usp.qracessivel.ui.result.content.URLContent
 import br.usp.qracessivel.ui.result.content.UnknownContent
@@ -53,6 +54,7 @@ fun ResultScreen(
 
         item {
             when (content) {
+                is PixQrContent -> PixContent(content)
                 is ResultContent.Text -> TextContent(content)
                 is ResultContent.Url -> URLContent(content)
                 is ResultContent.Contact -> ContactContent(content)
@@ -78,23 +80,4 @@ fun ResultScreen(
             )
         }
     }
-}
-
-@Composable
-@Preview(fontScale = 1.5f)
-fun ResultScreenPreview() {
-    ResultScreen(
-        content = ResultContent.Contact(
-            rawContent = "Contato",
-            name = "Roberto",
-            phone = "+5511987654321",
-            email = "roberto@contato.com",
-            address = "Rua do Contato, 123",
-            organization = "QR Acessivel LTDA",
-            title = "Desenvolvedor",
-            url = "https://qracessivel.com",
-            note = "Nota de contato"
-        ),
-        onDismiss = {}
-    )
 }

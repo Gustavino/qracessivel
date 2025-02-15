@@ -3,10 +3,10 @@ package br.usp.qracessivel.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FlashOff
@@ -24,11 +24,11 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import br.usp.qracessivel.viewmodel.MainContract
 import br.usp.qracessivel.model.ResultContent
 import br.usp.qracessivel.ui.preview.FakeMainViewModel
 import br.usp.qracessivel.ui.preview.previewViewModel
 import br.usp.qracessivel.ui.theme.QRCodeReaderTheme
+import br.usp.qracessivel.viewmodel.MainContract
 import br.usp.qracessivel.viewmodel.MainEvent
 import br.usp.qracessivel.viewmodel.QrCodeState
 import kotlinx.coroutines.flow.collectLatest
@@ -71,7 +71,7 @@ fun MainScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .fillMaxHeight(0.25f)
+                .fillMaxHeight(0.35f)
                 .padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -104,18 +104,21 @@ fun MainScreen(
             }
         }
 
-        Row(
+        Column (
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
+                .fillMaxHeight(0.25f)
                 .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AccessibleFloatingButton(
                 text = "LANTERNA",
                 icon = if (isTorchOn) Icons.Default.FlashOff else Icons.Default.FlashOn,
                 onClick = viewModel::toggleTorch,
-                contentDescription = if (isTorchOn) "Desligar lanterna" else "Ligar lanterna"
+                contentDescription = if (isTorchOn) "Desligar lanterna" else "Ligar lanterna",
+                modifier = Modifier.height(72.dp)
             )
 
             AccessibleFloatingButton(

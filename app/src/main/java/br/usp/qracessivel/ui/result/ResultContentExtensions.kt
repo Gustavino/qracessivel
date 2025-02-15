@@ -1,9 +1,11 @@
 package br.usp.qracessivel.ui.result
 
+import br.usp.qracessivel.model.PixQrContent
 import br.usp.qracessivel.model.ResultContent
 
 fun ResultContent.getTypeLabel(): String {
     return when (this) {
+        is PixQrContent -> "PIX"
         is ResultContent.Text -> "Texto"
         is ResultContent.Url -> "Link"
         is ResultContent.Contact -> "Contato"

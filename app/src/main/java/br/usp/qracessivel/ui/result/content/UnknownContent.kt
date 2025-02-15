@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun UnknownContent(content: ResultContent.Unknown) {
@@ -22,7 +22,7 @@ fun UnknownContent(content: ResultContent.Unknown) {
                 textAlign = TextAlign.Center
             )
 
-            ActionButton(
+            AccessibleFloatingButton(
                 icon = Icons.Default.ContentCopy,
                 text = "Copiar conteúdo",
                 contentDescription = "Copiar conteúdo não reconhecido",

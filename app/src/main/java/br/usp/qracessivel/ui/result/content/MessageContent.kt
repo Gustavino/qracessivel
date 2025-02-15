@@ -12,7 +12,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun MessageContent(content: ResultContent.Message) {
@@ -36,14 +36,14 @@ fun MessageContent(content: ResultContent.Message) {
             val isWhatsApp = content.number.startsWith("wa.me/")
             if (isWhatsApp) {
                 // todo: refinar caso de whatsapp.
-                ActionButton(
+                AccessibleFloatingButton(
                     icon = Icons.AutoMirrored.Filled.Send,
                     text = "Abrir no WhatsApp",
                     contentDescription = "Abrir conversa no WhatsApp",
                     onClick = { /* Implementar abertura do WhatsApp */ }
                 )
             } else {
-                ActionButton(
+                AccessibleFloatingButton(
                     icon = Icons.AutoMirrored.Filled.Send,
                     text = "Enviar SMS",
                     contentDescription = "Enviar SMS para ${content.number}",

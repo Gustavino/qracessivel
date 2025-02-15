@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import br.usp.qracessivel.model.ResultContent
-import br.usp.qracessivel.ui.components.ActionButton
+import br.usp.qracessivel.ui.components.AccessibleFloatingButton
 
 @Composable
 fun ContactContent(content: ResultContent.Contact) {
@@ -23,7 +23,7 @@ fun ContactContent(content: ResultContent.Contact) {
             )
 
             content.phone?.let {
-                ActionButton(
+                AccessibleFloatingButton(
                     icon = Icons.Default.Phone,
                     text = it,
                     contentDescription = "Ligar para ${content.name}: $it",
@@ -32,7 +32,7 @@ fun ContactContent(content: ResultContent.Contact) {
             }
 
             content.email?.let {
-                ActionButton(
+                AccessibleFloatingButton(
                     icon = Icons.Default.Email,
                     text = it,
                     contentDescription = "Enviar email para ${content.name}: $it",
@@ -41,7 +41,7 @@ fun ContactContent(content: ResultContent.Contact) {
             }
 
             content.address?.let {
-                ActionButton(
+                AccessibleFloatingButton(
                     icon = Icons.Default.Place,
                     text = it,
                     contentDescription = "Ver endereço de ${content.name}: $it",
